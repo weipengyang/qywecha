@@ -14,6 +14,8 @@ using Senparc.Weixin.QY.AdvancedAPIs.MailList;
 using Senparc.Weixin.Work.AdvancedAPIs.OaDataOpen;
 using QJY.Common;
 using System.Text;
+using Senparc.Weixin;
+using Senparc.CO2NET.Extensions;
 
 namespace QJY.API
 {
@@ -67,7 +69,14 @@ namespace QJY.API
             }
             return null;
         }
+        public  WorkJsonResult GetExternalUserInfo(string userId)
+        {
+            string accessToken = GetToken();
+            var url = string.Format(Config.ApiWorkHost + "/cgi-bin/crm/get_external_contact?access_token={0}&external_userid={1}", accessToken.AsUrlData(), userId.AsUrlData());
+            return Get.GetJson<WorkJsonResult>(url);
 
+
+        }
         public JsonGroupTicket GetGroup_Ticket()
         {
             string access_token = GetToken();

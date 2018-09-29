@@ -10,7 +10,7 @@ using System.Xml;
 using QJY.API;
 using QJY.Data;
 using QJY.Common;
-
+using Tencent = Senparc.Weixin.QY.Tencent;
 namespace QJY.WEB
 {
     /// <summary>
@@ -69,7 +69,7 @@ namespace QJY.WEB
                                     }
                                 }
                                 var pj = new JH_Auth_WXPJB().GetEntity(p => p.TJID == jam.TJId);
-                                Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(pj.Token, pj.EncodingAESKey, ToUserName);
+                                Senparc.Weixin.QY.Tencent.WXBizMsgCrypt wxcpt = new Senparc.Weixin.QY.Tencent.WXBizMsgCrypt(pj.Token, pj.EncodingAESKey, ToUserName);
                                 int n = wxcpt.DecryptMsg(signature, timestamp, nonce, str, ref strde);
                                 XmlDocument XmlDocument1 = new XmlDocument();
                                 XmlDocument1.LoadXml(HttpContext.Current.Server.UrlDecode(strde));
@@ -254,9 +254,33 @@ namespace QJY.WEB
 
                 }
                 #endregion
-
                 #region 企业会话
-                if (strAction == "QYIM")
+                if (strAction == "WBLXRXQ")
+                {
+                    if (HttpContext.Current.Request.HttpMethod.ToUpper() == "POST")
+                    {
+                        string userId = context.Request["userId"] ?? "";
+                        string strCorpID = context.Request["corpid"] ?? "";
+                        var qy = new JH_Auth_QYB().GetALLEntities().First();
+                        if (qy != null)
+                        {
+                            try
+                            {
+
+                                WXHelp wx = new WXHelp(qy);
+                                var userinfo = wx.GetExternalUserInfo(userId);
+                                Model.Result = userinfo.P2PData;
+                                Model.ErrorMsg = userinfo.errmsg;
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+                    #endregion
+                    #region 企业会话
+                 if (strAction == "QYIM")
                 {
                     if (HttpContext.Current.Request.HttpMethod.ToUpper() == "POST")
                     {
@@ -345,8 +369,7 @@ namespace QJY.WEB
                     }
                 }
                 #endregion
-
-                #region 获取唯一code
+                   #region 获取唯一code
                 if (strAction.ToUpper() == "GetUserCodeByCode".ToUpper())
                 {
                     #region 获取Code
@@ -417,7 +440,7 @@ namespace QJY.WEB
                     #endregion
                 }
                 #endregion
-                #region 是否存在
+                  #region 是否存在
                 if (strAction.ToUpper() == "isexist".ToUpper())
                 {
                     if (context.Request["szhlcode"] != null)
@@ -627,7 +650,7 @@ namespace QJY.WEB
         /// <returns></returns>
         public bool CheckSignature(string token, string signature, string timestamp, string nonce, string corpId, string encodingAESKey, string echostr, ref string retEchostr)
         {
-            Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(token, encodingAESKey, corpId);
+            Senparc.Weixin.QY.Tencent.WXBizMsgCrypt wxcpt = new Tencent.WXBizMsgCrypt(token, encodingAESKey, corpId);
             int result = wxcpt.VerifyURL(signature, timestamp, nonce, echostr, ref retEchostr);
             if (result != 0)
             {

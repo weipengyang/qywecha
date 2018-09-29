@@ -776,7 +776,17 @@ var ComFunJS = {
             }, function (res) {
                 if (res.err_msg == "selectExternalContact:ok") {
                     userIds = res.userIds; //返回此次选择的外部联系人userId列表，数组类型
-                    $.getJSON("https://qyapi.weixin.qq.com/cgi-bin/crm/get_external_contact?access_token=ACCESS_TOKEN&external_userid=" + userIds[0])
+                    var corpId = ComFunJS.getQueryString("corpId");
+                    alert(userIds+corpId);
+                    $.post(
+                        "/API/WXAPI.ashx?action=WBLXRXQ&r=" + Math.random(),
+                        {
+                            userId: userIds[0],
+                            corpId: corpId
+                        },
+                        function (response) {
+                            alert(response);
+                    })
                     wx.invoke("openEnterpriseChat",{
                         // 注意：userIds和externalUserIds至少选填一个，且userIds+openIds总数不能超过2000。
                         //userIds: 'zhangshan;lisi;wangwu',    //参与会话的企业成员列表，格式为userid1;userid2;...，用分号隔开。
