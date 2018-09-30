@@ -776,13 +776,11 @@ var ComFunJS = {
             }, function (res) {
                 if (res.err_msg == "selectExternalContact:ok") {
                     userIds = res.userIds; //返回此次选择的外部联系人userId列表，数组类型
-                    var corpId = ComFunJS.getQueryString("corpId");
-                    alert(userIds+corpId);
+                    alert(userIds);
                     $.post(
                         "/API/WXAPI.ashx?action=WBLXRXQ&r=" + Math.random(),
                         {
-                            userId: userIds[0],
-                            corpId: corpId
+                            userId: userIds[0]
                         },
                         function (response) {
                             alert(response);

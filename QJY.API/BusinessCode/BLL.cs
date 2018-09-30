@@ -441,7 +441,7 @@ namespace QJY.API
             string err = "";
             try
             {
-                string dxqz = "企捷科技";
+                string dxqz = "爱卡养车";
                 decimal amcountmoney = 0;
                 var qy = new JH_Auth_QYB().GetEntity(d => d.ComId == ComId);
                 if (qy != null)

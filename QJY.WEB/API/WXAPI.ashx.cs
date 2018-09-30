@@ -260,7 +260,6 @@ namespace QJY.WEB
                     if (HttpContext.Current.Request.HttpMethod.ToUpper() == "POST")
                     {
                         string userId = context.Request["userId"] ?? "";
-                        string strCorpID = context.Request["corpid"] ?? "";
                         var qy = new JH_Auth_QYB().GetALLEntities().First();
                         if (qy != null)
                         {
@@ -269,7 +268,7 @@ namespace QJY.WEB
 
                                 WXHelp wx = new WXHelp(qy);
                                 var userinfo = wx.GetExternalUserInfo(userId);
-                                Model.Result = userinfo.P2PData;
+                                Model.Result = userinfo.external_contact;
                                 Model.ErrorMsg = userinfo.errmsg;
                             }
                             catch

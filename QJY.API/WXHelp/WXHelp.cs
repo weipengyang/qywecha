@@ -15,10 +15,10 @@ using Senparc.Weixin.Work.AdvancedAPIs.OaDataOpen;
 using QJY.Common;
 using System.Text;
 using Senparc.Weixin;
-using Senparc.CO2NET.Extensions;
 
 namespace QJY.API
 {
+    
     public class WXHelp
     {
 
@@ -69,12 +69,11 @@ namespace QJY.API
             }
             return null;
         }
-        public  WorkJsonResult GetExternalUserInfo(string userId)
+        public GetExUserinfoResult GetExternalUserInfo(string userId)
         {
-            string accessToken = GetToken();
+            string accessToken = CommonApi.GetToken(Qyinfo.corpId, "Z064e0T92rgEDCjfVBWr06KIy9et58Vl69SjlGl-rSg").access_token;
             var url = string.Format(Config.ApiWorkHost + "/cgi-bin/crm/get_external_contact?access_token={0}&external_userid={1}", accessToken.AsUrlData(), userId.AsUrlData());
-            return Get.GetJson<WorkJsonResult>(url);
-
+            return Get.GetJson<GetExUserinfoResult>(url);
 
         }
         public JsonGroupTicket GetGroup_Ticket()
